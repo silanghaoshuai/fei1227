@@ -33,37 +33,108 @@
       <div class="searchArea">
         <form action="###" class="searchForm">
           <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword"/>
-          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="search">搜索</button>
+          <button class="sui-btn btn-xlarge btn-danger" @click.prevent="search">搜索</button>
         </form>
       </div>
     </div>
   </header>
 </template>
 
+
 <script>
-export default {
-  name:'Header',
-  data () {
+  export default {
+    name: 'Header',
+
+    data () {
       return {
         keyword: 'atguigu'
       }
     },
-  methods:{
-    search(){
-      const keyword=this.keyword
 
-      this.$router.replace({
-        name:'search',
-        params:{keyword:keyword===''? undefined:keyword},
-        query:{keyword2:keyword.toUpperCase()}
-      })
+    methods: {
+      search () {
+        // 编程式路由导航(跳转)
+          // 字符串模式
+        // this.$router.push(`/search/${this.keyword}?keyword2=${this.keyword.toUpperCase()}`)
+          // 对象模式  (在开发中用得比较多)
+        const keyword = this.keyword
+        // if (keyword==='') {
+        //    this.$router.push('/search')
+        // } else {
+        //   this.$router.push(`/search/${keyword}?keyword2=${keyword.toUpperCase()}`)
+        // }
+
+        // 对象写法1:
+        /* if (keyword==='') {
+          this.$router.push({
+            name: 'search'
+          })
+        } else {
+          this.$router.push({
+            name: 'search', 
+            params: { keyword: keyword },
+            query: { keyword2: keyword.toUpperCase() }
+          })
+        } */
+
+        // 对象写法2:
+        /* this.$router.push({
+          name: 'search', 
+          params: { keyword: keyword==='' ? undefined : keyword },
+          query: { keyword2: keyword.toUpperCase() }
+        })
+        */
+        
+        
+        /* 
+        问题: 编程式路由跳转到当前路由(参数不变), 会抛出NavigationDuplicated的警告错误
+        router.push(location, onComplete?, onAbort?): 如果直接指定了回调函数, push方法没有返回值
+        router.push(location).then(onComplete).catch(onAbort)
+            如果没有直接指定回调函数, push方法返回值为promise
+            如果指定的是当前路由路径且参数数据不变化, push内部就会抛出一个失败的promise
+        */
+       /* 
+       解决方法1: 在进行路由跳转时指定成功/失败的回调函数, 也可以catch()处理抛出的错误promise
+       */
+        /* 
+        this.$router.push({
+          name: 'search', 
+          params: { keyword: keyword==='' ? undefined : keyword },
+          query: { keyword2: keyword.toUpperCase() }
+        }, () => {}) */
+        /* 
+        this.$router.push({
+          name: 'search', 
+          params: { keyword: keyword==='' ? undefined : keyword },
+          query: { keyword2: keyword.toUpperCase() }
+        }, undefined, () => {}) */
+        
+        /* 
+        this.$router.push({
+          name: 'search', 
+          params: { keyword: keyword==='' ? undefined : keyword },
+          query: { keyword2: keyword.toUpperCase() }
+        }).catch(() => {}) 
+        */
+
+        /* this.$router.replace({ // push是重写后的方法
+          name: 'search', 
+          params: { keyword: keyword==='' ? undefined : keyword },
+          query: { keyword2: keyword.toUpperCase() }
+        }) */
+
+        this.$router.push({ // push是重写后的方法
+          name: 'search', 
+          params: { keyword: keyword==='' ? undefined : keyword },
+          query: { keyword2: keyword.toUpperCase() }
+        }).then(() => {console.log('跳转成功的回调执行')})
+      }
     }
   }
-}
 </script>
 
 <style lang="less" scoped>
-   .header {
+  .header {
     &>.top {
       background-color: #eaeaea;
       height: 30px;
