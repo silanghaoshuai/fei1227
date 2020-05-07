@@ -1,4 +1,5 @@
 import ajax from "./ajax";
+import mockAjax from "./mockAjax";
 export function reqBaseCategoryList() {
   return ajax({
     method: "GET",
@@ -12,3 +13,5 @@ export function reqLogin(mobile, password) {
     data: { mobile, password },
   });
 }
+export const reqBanners = () => mockAjax("/banners");
+export const reqFloors = () => mockAjax("/floors");

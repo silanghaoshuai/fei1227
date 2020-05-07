@@ -9,11 +9,14 @@
 <script>
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { reqFloors } from "@/api";
 
 export default {
   name: "App",
   async mounted() {
-    console.log(this.$store.state);
+    const result = await reqFloors();
+    console.log("mock result ", result);
+    this.$store.dispatch("getBaseCategoryList");
   },
   components: {
     Header,
@@ -21,5 +24,4 @@ export default {
   },
 };
 </script>
-
 <style scoped></style>
